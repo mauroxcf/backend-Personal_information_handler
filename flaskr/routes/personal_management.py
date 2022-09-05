@@ -15,14 +15,14 @@ def get_all_person():
     It creates a dictionary, queries the database for all persons, and then returns a json response
     :return: A tuple of a jsonified dictionary and a status code.
     """
-    try:
-        persons = PersonalData.query.all()
+    persons = PersonalData.query.all()
+    person_list = []
+    for person in persons:
+        person_list.append(person.to_dict())
 
-        return jsonify({"status": "success",
-                            "message": "Successfully return all persons"}), 200
-    except Exception as error:
-        return jsonify({"status": "error",
-                        "message": "bad request"}), 400
+    return jsonify({"status": "success",
+                        "message": "Successfully return all persons",
+                        "data": person_list}), 200
 
 
 @personal_management.route("/new", methods=['POST'])
@@ -35,7 +35,7 @@ def add_person():
         try:
             # receive data
             response: dict = request.get_json()
-            document_type: DocumentType  = response.get("document_type")
+            document_type = response.get("document_type")
             document_id: int = response.get("document_id")
             first_name: str = response.get("first_name")
             last_name: str = response.get("last_name")

@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column , ForeignKey, DateTime, Integer, String, Text, Float, Enum
+from sqlalchemy_serializer import SerializerMixin
 from flaskr.utils.db import db
 import enum
 import datetime
@@ -9,15 +10,8 @@ class DocumentType(enum.Enum):
     cedula = "Cedula"
     pasaporte = "Pasaporte"
 
-class Basejson:
-    """ Class to have data in json without a specific parameter """
-    def to_dict(self):
-        """ Method to convert into dictionary """
-        dictionary: dict = self.__dict__
-        dictionary.pop('_sa_instance_state')
-        return dictionary
 
-class PersonalData(Basejson, db.Model):
+class PersonalData(SerializerMixin, db.Model):
     """Information of the Person
     """
     __tablename__ = 'personaldata'
