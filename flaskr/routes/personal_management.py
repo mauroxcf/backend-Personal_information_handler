@@ -56,14 +56,18 @@ def add_person():
 
 @personal_management.route("/delete", methods=['GET'])
 def delete_person():
-
+    """
+    It receives a JSON object with a id, then it queries the database for a person with that
+    id, and if it finds one, it deletes it
+    :return: A JSON object with the status and message.
+    """
     try:
         # receive data and get element by document_id
         response: dict = request.get_json()
-        document_id = response["document_id"]
+        person_id = response["id"]
 
         # delete Person object
-        person = PersonalData.query.filter_by(document_id=document_id).first()
+        person = PersonalData.query.filter_by(id=person_id).first()
 
         # save new changes
         db.session.delete(person)
@@ -74,3 +78,37 @@ def delete_person():
     except Exception as error:
         return jsonify({"status": "error",
                         "message": "bad request"}), 400
+
+
+@personal_management.route("/update/<id>", methods=['GET', 'POST'])
+def update_person(id):
+    """
+    It receives a request, checks if it's a POST request, if it is, it receives the data, updates the
+    object and saves it into the database, if it's not, it returns the object without changes
+    :param id: The id of the person to be updated
+    :return: The response is a JSON object with the following structure:
+    """
+    person = PersonalData.query.get(id)
+    if request.method == 'POST':
+        try:
+            # receive data
+            response: dict = request.get_json()
+            person.document_type = response.get("document_type")
+            person.document_id: int = response.get("document_id")
+            person.first_name: str = response.get("first_name")
+            person.last_name: str = response.get("last_name")
+
+            # save the object into the database
+            db.session.commit()
+
+            return jsonify({"status": "success",
+                            "message": "Successfully updated person"}), 200
+
+        except Exception as error:
+            return jsonify({"status": "error",
+                            "message": "bad request"}), 400
+    else:
+        person_no_changes = person.to_dict()
+        return jsonify({"status": "success",
+                            "message": "Successfully get person",
+                            "data": person_no_changes}), 200
