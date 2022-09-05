@@ -22,9 +22,11 @@ class PersonalData(SerializerMixin, db.Model):
     updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
+    #hobbie = Column(String(255), nullable=False)
 
     def __init__(self, document_type, document_id, first_name, last_name):
         self.document_type = document_type
         self.document_id = document_id
         self.first_name = first_name
         self.last_name = last_name
+        #self.hobbie = hobbie
