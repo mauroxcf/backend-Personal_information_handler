@@ -52,3 +52,25 @@ def add_person():
         except Exception as error:
             return jsonify({"status": "error",
                             "message": "bad request"}), 400
+
+
+@personal_management.route("/delete", methods=['GET'])
+def delete_person():
+
+    try:
+        # receive data and get element by document_id
+        response: dict = request.get_json()
+        document_id = response["document_id"]
+
+        # delete Person object
+        person = PersonalData.query.filter_by(document_id=document_id).first()
+
+        # save new changes
+        db.session.delete(person)
+        db.session.commit()
+
+        return jsonify({"status": "success",
+                            "message": "Successfully deleted person"}), 200
+    except Exception as error:
+        return jsonify({"status": "error",
+                        "message": "bad request"}), 400
