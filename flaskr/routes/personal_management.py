@@ -39,9 +39,10 @@ def add_person():
             document_id: int = response.get("document_id")
             first_name: str = response.get("first_name")
             last_name: str = response.get("last_name")
+            hobbie: str = response.get("hobbie")
             print(response)
             # create a new Person object
-            new_person = PersonalData(document_type, document_id, first_name, last_name)
+            new_person = PersonalData(document_type, document_id, first_name, last_name, hobbie)
             # save the object into the database
             db.session.add(new_person)
             db.session.commit()
@@ -97,6 +98,7 @@ def update_person(id):
             person.document_id: int = response.get("document_id")
             person.first_name: str = response.get("first_name")
             person.last_name: str = response.get("last_name")
+            person.hobbie: str = response.get("hobbie")
 
             # save the object into the database
             db.session.commit()

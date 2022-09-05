@@ -24,7 +24,7 @@ class PersonalData(SerializerMixin, db.Model):
     last_name = Column(String(255), nullable=False)
     hobbie = Column(String(255), nullable=False)
 
-    def __init__(self, document_type, document_id, first_name, last_name):
+    def __init__(self, document_type, document_id, first_name, last_name, hobbie):
         self.document_type = document_type
         self.document_id = document_id
         self.first_name = first_name
