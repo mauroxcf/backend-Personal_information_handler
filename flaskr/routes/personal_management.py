@@ -114,3 +114,21 @@ def update_person(id):
         return jsonify({"status": "success",
                             "message": "Successfully get person",
                             "data": person_no_changes}), 200
+
+
+@personal_management.route("/person/<id>", methods=['GET'])
+def get_person(id):
+    """
+    It gets a person from the database and returns a json object with the person's data
+    :param id: The id of the person you want to get
+    :return: A tuple of a jsonified dictionary and a status code.
+    """
+    try:
+        person = PersonalData.query.get(id)
+        person_json = person.to_dict()
+        return jsonify({"status": "success",
+                                "message": "Successfully get person",
+                                "data": person_json}), 200
+    except Exception as error:
+        return jsonify({"status": "error",
+                        "message": "bad request"}), 400

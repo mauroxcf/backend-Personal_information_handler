@@ -63,6 +63,7 @@ Here is all the end points that you can use:
 | GET | /api/v1.0/all/ | Returns the persons that already registred in the database. |
 | POST | /api/v1.0/new/ | Create a new person. |
 | POST | /api/v1.0/update/[id] | Match the person id passed, and update the fields of this. |
+| GET | /api/v1.0/person/[id] | Match the person id passed, and return his information. |
 | GET | /api/v1.0/delete/ | Delete a person. |
 ​
 
