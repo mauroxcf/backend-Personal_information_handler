@@ -55,8 +55,8 @@ def add_person():
                             "message": "bad request"}), 400
 
 
-@personal_management.route("/delete", methods=['GET'])
-def delete_person():
+@personal_management.route("/delete/<id>", methods=['GET', 'DELETE'])
+def delete_person(id):
     """
     It receives a JSON object with a id, then it queries the database for a person with that
     id, and if it finds one, it deletes it
@@ -64,11 +64,10 @@ def delete_person():
     """
     try:
         # receive data and get element by document_id
-        response: dict = request.get_json()
-        person_id = response["id"]
+        print((id))
 
         # delete Person object
-        person = PersonalData.query.filter_by(id=person_id).first()
+        person = PersonalData.query.filter_by(id=id).first()
 
         # save new changes
         db.session.delete(person)
@@ -89,6 +88,7 @@ def update_person(id):
     :param id: The id of the person to be updated
     :return: The response is a JSON object with the following structure:
     """
+    print(id)
     person = PersonalData.query.get(id)
     if request.method == 'POST':
         try:
