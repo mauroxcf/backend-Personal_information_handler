@@ -15,14 +15,19 @@ def get_all_person():
     It creates a dictionary, queries the database for all persons, and then returns a json response
     :return: A tuple of a jsonified dictionary and a status code.
     """
-    persons = PersonalData.query.all()
-    person_list = []
-    for person in persons:
-        person_list.append(person.to_dict())
+    try:
+        persons = PersonalData.query.all()
+        person_list = []
+        for person in persons:
+            person_list.append(person.to_dict())
 
-    return jsonify({"status": "success",
-                        "message": "Successfully return all persons",
-                        "data": person_list}), 200
+        return jsonify({"status": "success",
+                            "message": "Successfully return all persons",
+                            "data": person_list}), 200
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"status": "error",
+                        "message": "bad request"}), 400
 
 
 @personal_management.route("/new", methods=['POST'])
@@ -51,6 +56,7 @@ def add_person():
                             "message": "Successfully created person"}), 200
 
         except Exception as error:
+            db.session.rollback()
             return jsonify({"status": "error",
                             "message": "bad request"}), 400
 
@@ -76,6 +82,7 @@ def delete_person(id):
         return jsonify({"status": "success",
                             "message": "Successfully deleted person"}), 200
     except Exception as error:
+        db.session.rollback()
         return jsonify({"status": "error",
                         "message": "bad request"}), 400
 
@@ -107,6 +114,7 @@ def update_person(id):
                             "message": "Successfully updated person"}), 200
 
         except Exception as error:
+            db.session.rollback()
             return jsonify({"status": "error",
                             "message": "bad request"}), 400
     else:
@@ -130,5 +138,6 @@ def get_person(id):
                                 "message": "Successfully get person",
                                 "data": person_json}), 200
     except Exception as error:
+        db.session.rollback()
         return jsonify({"status": "error",
                         "message": "bad request"}), 400
